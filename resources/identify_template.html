@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片识别结果</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #9f7aea;
+            font-weight: 700;
+        }
+
+        /* 原始图片区域 */
+        .original-image {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .original-image img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 4px solid white;
+        }
+
+        .content {
+            line-height: 1.8;
+            font-size: 18px;
+            color: #4a4e69;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px dashed #b28dff;
+            margin-bottom: 30px;
+        }
+
+        /* Markdown 样式优化 */
+        .content h1,
+        .content h2,
+        .content h3 {
+            color: #22223b;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: 900;
+        }
+
+        .content h1 {
+            font-size: 28px;
+            border-bottom: 3px solid #b28dff;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .content h2 {
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        .content h3 {
+            font-size: 20px;
+            color: #764ba2;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .content strong {
+            color: #e56b6f;
+            font-weight: 900;
+            padding: 0 4px;
+        }
+
+        .content ul,
+        .content ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+        }
+
+        .content blockquote {
+            border-left: 5px solid #b28dff;
+            background: #f3e8ff;
+            padding: 15px 20px;
+            border-radius: 0 15px 15px 0;
+            color: #555;
+            margin: 20px 0;
+        }
+
+        .content code {
+            background: transparent;
+            color: #667eea;
+            padding: 0 4px;
+            border-radius: 0;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: 900;
+            border: none;
+            box-shadow: none;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #b0c4b1;
+            font-weight: 600;
+            letter-spacing: 1px;
+            line-height: 1.6;
+        }
+
+        /* 隐藏原始数据容器 */
+        #raw-data,
+        #image-data,
+        #related-images-data {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">🔍 图片识别结果</div>
+            <div class="subtitle">✨ 由 Gemini-2.5-pro 识别 ✨</div>
+        </div>
+
+        <!-- 原始图片 -->
+        <div class="original-image" id="original-image-container">
+            <!-- 图片将通过 JS 插入 -->
+        </div>
+
+        <!-- 隐藏的数据 -->
+        <div id="raw-data">{{data.result}}</div>
+        <div id="image-data">{{data.imageUrl}}</div>
+        <div id="related-images-data">{{data.relatedImages}}</div>
+
+        <!-- 识别结果 -->
+        <div id="content" class="content"></div>
+
+        <div class="footer">
+            <div style="margin-bottom: 8px; color: #e8a87c;">AI识别内容仅供参考，不一定完全正确</div>
+            <div>Powered by RefinedShit-Plugin • ₍ (ง ˙ω˙)ว ⁾</div>
+        </div>
+    </div>
+
+    <script>
+        // 获取数据
+        const rawText = document.getElementById('raw-data').innerText;
+        const imageUrl = document.getElementById('image-data').innerText;
+        const relatedImagesText = document.getElementById('related-images-data').innerText;
+
+        console.log('原始文本:', rawText);
+        console.log('图片URL:', imageUrl);
+
+        // 显示原始图片
+        if (imageUrl && imageUrl.trim()) {
+            const img = document.createElement('img');
+            img.src = imageUrl.trim();
+            img.alt = '原始图片';
+            img.onerror = function () {
+                console.error('图片加载失败:', imageUrl);
+                this.style.display = 'none';
+            };
+            document.getElementById('original-image-container').appendChild(img);
+            console.log('原始图片已添加到DOM');
+        } else {
+            console.warn('没有图片URL');
+        }
+
+        // 渲染 Markdown 为 HTML
+        if (rawText && rawText.trim()) {
+            try {
+                // 使用 marked 渲染（如果可用）
+                if (typeof marked !== 'undefined' && marked.parse) {
+                    marked.setOptions({
+                        breaks: true,
+                        gfm: true
+                    });
+                    document.getElementById('content').innerHTML = marked.parse(rawText);
+                    console.log('Markdown 渲染成功 (marked)');
+                } else {
+                    // 降级：直接显示文本，简单替换换行
+                    const formatted = rawText
+                        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\n/g, '<br>');
+                    document.getElementById('content').innerHTML = formatted;
+                    console.log('Markdown 渲染成功 (fallback)');
+                }
+            } catch (e) {
+                console.error('Markdown 渲染失败:', e);
+                // 如果渲染失败，至少显示原始文本
+                document.getElementById('content').textContent = rawText;
+            }
+        } else {
+            console.warn('没有识别结果文本');
+            document.getElementById('content').innerHTML = '<p style="color: #999;">未获取到识别结果</p>';
+        }
+    </script>
+</body>
+
+</html>
