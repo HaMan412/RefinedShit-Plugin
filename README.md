@@ -56,9 +56,9 @@ export default {
 
 **触发方式：** 回复转发消息并输入 `总结`
 
-![聊天记录总结示例](C:/Users/x1805/.gemini/antigravity/brain/4c141bd1-0a73-4688-a136-4c0851386ccd/uploaded_image_0_1764061184817.png)
+![聊天记录总结示例](https://github.com/HaMan412/RefinedShit-Plugin/blob/main/img/1.png)
 
-![总结结果展示](C:/Users/x1805/.gemini/antigravity/brain/4c141bd1-0a73-4688-a136-4c0851386ccd/uploaded_image_1_1764061184817.png)
+![总结结果展示](https://github.com/HaMan412/RefinedShit-Plugin/blob/main/img/2.png)
 
 **特点：**
 - ✅ 自动提取转发消息中的所有文本和图片
@@ -71,9 +71,9 @@ export default {
 
 **触发方式：** 回复图片并输入 `看看这是谁`
 
-![图片识别请求](C:/Users/x1805/.gemini/antigravity/brain/4c141bd1-0a73-4688-a136-4c0851386ccd/uploaded_image_2_1764061184817.png)
+![图片识别请求](https://github.com/HaMan412/RefinedShit-Plugin/blob/main/img/3.png)
 
-![识别结果展示](C:/Users/x1805/.gemini/antigravity/brain/4c141bd1-0a73-4688-a136-4c0851386ccd/uploaded_image_3_1764061184817.png)
+![识别结果展示](https://github.com/HaMan412/RefinedShit-Plugin/blob/main/img/4.png)
 
 ## 🔧 注意事项
 
@@ -95,6 +95,4 @@ export default {
 
 ## 📄 开源协议
 
-本项目采用 MIT 协议开源"# RefinedShit-Plugin" 
-"# RefinedShit-Plugin" 
-"# RefinedShit-Plugin" 
+本项目采用 MIT 协议开源
